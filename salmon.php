@@ -46,7 +46,7 @@ class SalmonEntry {
    * @return boolean True if the atom's parent's name is equal to the value
    *     of $parent.
    */
-  function parent_is($atom, $parent, $breadcrumbs) {
+	public static function parent_is( $atom, $parent, $breadcrumbs ) {
     return ($breadcrumbs[$atom['level'] - 1] == $parent);     
   }
   
@@ -55,7 +55,7 @@ class SalmonEntry {
    * @param string $atom_string The raw POST to the Salmon endpoint.
    * @return SalmonEntry An object representing the information in the POST.
    */
-  function from_atom($atom_string) {  	
+  public static function from_atom($atom_string) {
     $xml_parser = xml_parser_create(''); 
     $xml_values = array();
     $xml_tags = array();
