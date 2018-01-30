@@ -1,0 +1,30 @@
+{
+  "name": "wordpress-salmon",
+  "description": "Salmon plugin for WordPress",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pfefferle/wordpress-salmon.git"
+  },
+  "keywords": [
+    "diso",
+    "OStatus",
+    "Mastodon",
+    "Diaspora",
+    "federated",
+    "StatusNET",
+    "Gnu.Social",
+    "Salmon",
+    "Comments"
+  ],
+  "author": "Matthias Pfefferle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pfefferle/wordpress-salmon/issues"
+  },
+  "homepage": "https://github.com/pfefferle/wordpress-salmon#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-wp-i18n": "^1.0.1",
+    "grunt-wp-readme-to-markdown": "^2.0.1"
+  }
+}

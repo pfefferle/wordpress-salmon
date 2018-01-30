@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Salmon for WordPress
+ * Plugin Name: Salmon
  * Plugin URI: https://github.com/pfefferle/wordpress-salmon
  * Description: Salmon plugin for WordPress.
- * Version: 0.9
+ * Version: 0.9.0
  * Author: Matthias Pfefferle
  * Author URI: https://notiz.blog/
  */
