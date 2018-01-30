@@ -40,9 +40,9 @@ class SalmonAdminPages {
 	 * displays the yiid settings page
 	 */
 	public static function showSettings() {
-	    global $tab;
+		global $tab;
 		?>
-        <div class="wrap">
+		<div class="wrap">
 			<h2>Salmon for WordPress</h2>
 
 			<p>"Salmon for WordPress" needs some plugins to work properly.</p>
