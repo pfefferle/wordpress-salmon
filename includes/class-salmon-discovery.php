@@ -83,7 +83,7 @@ class Salmon_Discovery {
 	public static function add_salmon_link() {
 		if ( function_exists( "get_webfinger" ) ) {
 			$webfinger = get_webfinger( get_the_author_meta( "ID" ), true );
-			echo '<link rel="salmon" href="' . $webfinger . '" />';
+			printf( '<link rel="salmon" href="%s" />', $webfinger );
 		}
 	}
 
@@ -133,8 +133,8 @@ class Salmon_Discovery {
 			$namespace = "";
 		}
 
-		echo "<" . $namespace . "link rel='salmon' href='" . Salmon_Plugin::generate_api_url( $user ) . "'/>";
-		echo "<" . $namespace . "link rel='http://salmon-protocol.org/ns/salmon-replies' href='" . Salmon_Plugin::generate_api_url( $user ) . "'/>";
-		echo "<" . $namespace . "link rel='http://salmon-protocol.org/ns/salmon-mention' href='" . Salmon_Plugin::generate_api_url( $user ) . "'/>";
+		printf( '<%slink rel="salmon" href="%s"/>', $namespace, esc_url( Salmon_Plugin::generate_api_url( $user ) ) );
+		printf( '<%slink rel="http://salmon-protocol.org/ns/salmon-replies" href="%s"/>', $namespace, esc_url( Salmon_Plugin::generate_api_url( $user ) ) );
+		printf( '<%slink rel="http://salmon-protocol.org/ns/salmon-mention" href="%s"/>', $namespace, esc_url( Salmon_Plugin::generate_api_url( $user ) ) );
 	}
 }
