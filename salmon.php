@@ -46,7 +46,7 @@ class Salmon_Plugin {
 		add_action( 'generate_rewrite_rules', array( 'Salmon_Plugin', 'add_rewrite_rules' ) );
 
 		// add avatar filter
-		add_filter( 'get_avatar', array( 'Salmon_Plugin', 'add_salmon_avatar' ), 10, 5 );
+		add_filter( 'pre_get_avatar_data', array( 'Salmon_Plugin', 'pre_get_avatar_data' ), 10, 2 );
 
 		add_action( 'comment_atom_entry', array( 'Salmon_Plugin', 'add_crossposting_extension' ) );
 
@@ -84,38 +84,36 @@ class Salmon_Plugin {
 	}
 
 	/**
-	 * displays facebook avatars for the custom comment type "facebook"
+	 * Replaces the default avatar with the Salmon photo
 	 *
-	 * @param string $avatar the original img tag
+	 * @param array             $args Arguments passed to get_avatar_data(), after processing.
+	 * @param int|string|object $id_or_email A user ID, email address, or comment object
 	 *
-	 * @return string the new image tag
+	 * @return array $args
 	 */
-	public static function add_salmon_avatar( $avatar, $id_or_email, $size, $default, $alt = '' ) {
-		if ( ! is_object( $id_or_email ) || ! isset( $id_or_email->comment_type ) || get_comment_meta( $id_or_email->comment_ID, '_comment_type', true ) != 'salmon' ) {
-			return $avatar;
+	public static function pre_get_avatar_data( $args, $id_or_email ) {
+		if ( ! $id_or_email instanceof WP_Comment ||
+			! isset( $id_or_email->comment_type ) ||
+			$id_or_email->user_id ) {
+			return $args;
 		}
 
 		$avatars = get_comment_meta( $id_or_email->comment_ID, '_salmon_avatars', true );
 
 		if ( ! $avatars ) {
-			return $avatar;
+			return $args;
 		}
 
 		if ( array_key_exists( $size, $avatars ) ) {
-			$url = $avatars[ $size ];
+			$args['url'] = $avatars[ $size ];
 		} else {
-			$url = $avatars[ min( array_diff( array_keys( $avatars ), range( 0, $size ) ) ) ];
+			$args['url'] = $avatars[ min( array_diff( array_keys( $avatars ), range( 0, $size ) ) ) ];
 		}
 
-		if ( false === $alt ) {
-			$safe_alt = '';
-		} else {
-			$safe_alt = esc_attr( $alt );
-		}
+		$args['class'][] = 'avatar-salmon';
+		$args['class'][] = "avatar-$size";
 
-		$avatar = "<img alt='{$safe_alt}' src='{$url}' class='avatar avatar-{$size} photo avatar-facebook' height='{$size}' width='{$size}' />";
-
-		return $avatar;
+		return $args;
 	}
 
 	/**
