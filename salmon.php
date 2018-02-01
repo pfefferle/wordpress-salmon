@@ -35,7 +35,6 @@ class Salmon_Plugin {
 		Salmon_Discovery::init();
 
 		require_once 'includes/class-magic-sig.php';
-		require_once 'admin-pages.php';
 
 		// Query handler
 		add_action( 'parse_query', array( 'Salmon_Plugin', 'parse_query' ) );
@@ -48,6 +47,9 @@ class Salmon_Plugin {
 		add_filter( 'get_avatar', array( 'Salmon_Plugin', 'add_salmon_avatar' ), 10, 5 );
 
 		add_action( 'comment_atom_entry', array( 'Salmon_Plugin', 'add_crossposting_extension' ) );
+
+		add_action( 'admin_init', array( 'Salmon_Plugin', 'text_domain' ) );
+		add_action( 'admin_menu', array( 'Salmon_Plugin', 'admin_menu' ) );
 	}
 
 	/**
@@ -129,12 +131,14 @@ class Salmon_Plugin {
 
 			// add extension if id is set
 			if ( $id ) {
-				echo '<crosspost:source xmlns:crosspost="http://purl.org/syndication/cross-posting">' . "\n";
-				echo '  <id>' . $id . '</id>' . "\n";
-				if ( $link ) {
-					echo '  <link rel="alternate" type="text/html" href="' . $link . '" />' . "\n";
-				}
-				echo '</crosspost:source>' . "\n";
+?>
+	<crosspost:source xmlns:crosspost="http://purl.org/syndication/cross-posting">
+		<id><?php echo $id; ?></id>
+		<?php if ( $link ) { ?>
+		<link rel="alternate" type="text/html" href="<?php echo $link; ?>" />
+		<?php } ?>
+	</crosspost:source>
+<?php
 			}
 		}
 	}
@@ -270,5 +274,30 @@ class Salmon_Plugin {
 				</html>
 		<?php
 		exit;
+	}
+
+	/**
+	 * Load plugin text domain
+	 */
+	public static function text_domain() {
+		load_plugin_textdomain( 'salmon' );
+	}
+	/**
+	 * Add admin menu entry
+	 */
+	public static function admin_menu() {
+		add_options_page(
+			'Salmon',
+			'Salmon',
+			'manage_options',
+			'salmon',
+			array( 'Salmon_Plugin', 'settings_page' )
+		);
+	}
+	/**
+	 * Load settings page
+	 */
+	public static function settings_page() {
+		load_template( dirname( __FILE__ ) . '/templates/settings-page.php' );
 	}
 }
