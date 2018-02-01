@@ -17,12 +17,18 @@ You can find more informations about Salmon here: http://www.salmon-protocol.org
 
 This plugin requires:
 
-* the `host-meta`-plugin: https://wordpress.org/plugins/host-meta/
-* the `webfinger`-plugin: https://wordpress.org/plugins/webfinger/
+* the `host-meta`-plugin: <https://wordpress.org/plugins/host-meta/>
+* the `webfinger`-plugin: <https://wordpress.org/plugins/webfinger/>
 
 more doku soon!
 
 == Changelog ==
+
+= 0.9.0 =
+
+* general refactoring
+* refactored the code to use openssl instead of custom PHP code
+* simpler avatar code
 
 = 0.5 =
 
