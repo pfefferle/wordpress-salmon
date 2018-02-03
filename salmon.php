@@ -6,6 +6,8 @@
  * Version: 0.9.0
  * Author: Matthias Pfefferle
  * Author URI: https://notiz.blog/
+ * License: MIT
+ * License URI: http://opensource.org/licenses/MIT
  * Text Domain: salmon
  * Domain Path: /languages
  */

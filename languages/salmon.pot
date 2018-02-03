@@ -1,10 +1,10 @@
 # Copyright (C) 2018 Matthias Pfefferle
-# This file is distributed under the same license as the Salmon package.
+# This file is distributed under the MIT.
 msgid ""
 msgstr ""
 "Project-Id-Version: Salmon 0.9.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/salmon\n"
-"POT-Creation-Date: 2018-02-01 22:26:09+00:00\n"
+"POT-Creation-Date: 2018-02-02 12:03:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
