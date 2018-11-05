@@ -1,6 +1,4 @@
 <?php
-require_once 'class-webfinger.php';
-
 /**
  * Represents a single Salmon entry retrieved from a post to the Salmon
  * endpoint.
@@ -19,7 +17,6 @@ class Salmon_Entry {
 	public $title;
 	public $updated;
 	public $salmon_signature;
-	public $webfinger;
 	public $avatars;
 
 	/**
