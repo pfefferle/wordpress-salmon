@@ -4,7 +4,6 @@ wp_enqueue_style( 'plugin-install' );
 wp_enqueue_script( 'plugin-install' );
 add_thickbox();
 $GLOBALS['tab'] = 'custom';
-
 ?>
 <div class="wrap">
 	<h2><?php esc_html_e( 'Salmon', 'salmon' ); ?></h2>

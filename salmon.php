@@ -3,7 +3,7 @@
  * Plugin Name: Salmon
  * Plugin URI: https://github.com/pfefferle/wordpress-salmon
  * Description: Salmon plugin for WordPress.
- * Version: 0.9.0
+ * Version: 0.9.1
  * Author: Matthias Pfefferle
  * Author URI: https://notiz.blog/
  * License: MIT
@@ -13,7 +13,7 @@
  */
 
 /*
- * thanks to Arne Roomann-Kurrik for his inspiration with salmonpress
+ * Thanks to Arne Roomann-Kurrik for his inspiration with salmonpress
  *
  * salmonpress: http://code.google.com/p/salmonpress/
  * Arne Roomann-Kurrik: http://roomanna.com
@@ -57,7 +57,7 @@ class Salmon_Plugin {
 	}
 
 	/**
-	 * generates the enpoint url
+	 * Generates the enpoint url
 	 *
 	 * @param Object $user |null
 	 *
@@ -78,8 +78,9 @@ class Salmon_Plugin {
 	 * Salmon post if the parameter exists.
 	 */
 	public static function parse_query( $wp_query ) {
-		if ( isset( $wp_query->query_vars['salmon'] ) ||
-				 isset( $wp_query->query_vars['salmonpress'] )
+		if (
+			isset( $wp_query->query_vars['salmon'] ) ||
+			isset( $wp_query->query_vars['salmonpress'] )
 		) {
 			Salmon_Plugin::parse_salmon_post();
 		}
@@ -119,13 +120,13 @@ class Salmon_Plugin {
 	}
 
 	/**
-	 * adds the crossposting extension to the feeds
+	 * Adds the crossposting extension to the feeds
 	 *
-	 * @param int $commentId
+	 * @param int $comment_id
 	 */
-	public static function add_crossposting_extension( $commentId ) {
+	public static function add_crossposting_extension( $comment_id ) {
 		// get comment
-		$comment = get_comment( $commentId );
+		$comment = get_comment( $comment_id );
 		// check if comment-type is 'salmon'
 		if ( get_comment_meta( $comment->comment_ID, '_comment_type', true ) == true ) {
 			$id   = get_comment_meta( $comment->comment_ID, '_crossposting_id', true );
@@ -133,21 +134,21 @@ class Salmon_Plugin {
 
 			// add extension if id is set
 			if ( $id ) {
-?>
+	?>
 	<crosspost:source xmlns:crosspost="http://purl.org/syndication/cross-posting">
 		<id><?php echo $id; ?></id>
 		<?php if ( $link ) { ?>
 		<link rel="alternate" type="text/html" href="<?php echo $link; ?>" />
 		<?php } ?>
 	</crosspost:source>
-<?php
+	<?php
 			}
 		}
 	}
 
 
 	/**
-	 * Adds the 'Salmon_Plugin' query variable to wordpress.
+	 * Adds the 'Salmon_Plugin' query variable to WordPress.
 	 */
 	public static function query_vars( $queryvars ) {
 		$queryvars[] = 'salmon';
@@ -172,7 +173,7 @@ class Salmon_Plugin {
 		global $wp_rewrite;
 		$new_rules         = array(
 			'salmon/?(.+)' => 'index.php?salmon=' . $wp_rewrite->preg_index( 1 ),
-			'salmon'       => 'index.php?salmon=endpoint'
+			'salmon'       => 'index.php?salmon=endpoint',
 		);
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
 	}
@@ -191,8 +192,9 @@ class Salmon_Plugin {
 		endif;
 
 		// Allow cross domain JavaScript requests, from salmon-playground.
-		if ( strtoupper( $_SERVER['REQUEST_METHOD'] ) == "OPTIONS" &&
-				strtoupper( $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] ) == "POST"
+		if (
+			'OPTIONS' === strtoupper( $_SERVER['REQUEST_METHOD'] ) &&
+			'POST' === strtoupper( $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'] )
 		) {
 			// See https://developer.mozilla.org/En/HTTP_access_control
 			header( 'HTTP/1.1 200 OK' );
@@ -200,14 +202,14 @@ class Salmon_Plugin {
 			die();
 		}
 
-		if ( strtoupper( $_SERVER['REQUEST_METHOD'] ) !== "POST" ) {
+		if ( strtoupper( $_SERVER['REQUEST_METHOD'] ) !== 'POST' ) {
 			header( 'HTTP/1.1 400 Bad Request' );
-			echo Salmon_Plugin::endpoint( "Error: The posted Salmon entry was malformed." );
+			echo Salmon_Plugin::endpoint( 'Error: The posted Salmon entry was malformed.' );
 		}
 
-		$requestBody = @file_get_contents( 'php://input' );
+		$request_body = @file_get_contents( 'php://input' );
 
-		$env  = Magic_Sig::parse( $requestBody );
+		$env  = Magic_Sig::parse( $request_body );
 		$data = base64_url_decode( $env['data'] );
 
 		do_action( 'salmon_atom_data', $data, $user );
@@ -217,7 +219,7 @@ class Salmon_Plugin {
 		if ( get_option( 'salmon_validate' ) ) {
 			if ( $entry->validate() === false ) {
 				header( 'HTTP/1.1 403 Forbidden' );
-				Salmon_Plugin::endpoint( "Error: The posted Salmon entry was malformed." );
+				Salmon_Plugin::endpoint( 'Error: The posted Salmon entry was malformed.' );
 			}
 		}
 
@@ -228,24 +230,16 @@ class Salmon_Plugin {
 			wp_mail( $user->user_email, 'you\'ve fished a salmon', strip_tags( $commentdata['comment_content'] ) );
 		}
 
-		if ( $commentdata['comment_post_ID'] == '' ) {
-			header( 'HTTP/1.1 400 Bad Request' );
-			print "The posted Salmon entry was malformed.";
-			//} else if (!isset($commentdata['user_id'])) {
-			//  if (get_option('comment_registration')) {
-			//    header('HTTP/1.1 403 Forbidden');
-			//    Salmon_Plugin::endpoint("Error: The blog settings only allow registered users to post comments.");
-			//  }
-		} else {
+		if ( $commentdata['comment_post_ID'] ) {
 			// save comment
-			$commentId = wp_insert_comment( $commentdata );
+			$comment_id = wp_insert_comment( $commentdata );
 			// add comment meta
-			update_comment_meta( $commentId, '_salmon_avatars', $entry->avatars );
-			update_comment_meta( $commentId, '_comment_type', 'salmon' );
-			update_comment_meta( $commentId, '_crossposting_id', $entry->id );
-			update_comment_meta( $commentId, '_crossposting_link', $entry->link );
+			update_comment_meta( $comment_id, '_salmon_avatars', $entry->avatars );
+			update_comment_meta( $comment_id, '_comment_type', 'salmon' );
+			update_comment_meta( $comment_id, '_crossposting_id', $entry->id );
+			update_comment_meta( $comment_id, '_crossposting_link', $entry->link );
 			header( 'HTTP/1.1 201 Created' );
-			Salmon_Plugin::endpoint( "The Salmon entry was posted." );
+			Salmon_Plugin::endpoint( 'The Salmon entry was posted.' );
 		}
 		die();
 	}
@@ -257,9 +251,7 @@ class Salmon_Plugin {
 		?>
 				<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 								"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-				<html xmlns="http://www.w3.org/1999/xhtml" <?php if ( function_exists( 'language_attributes' ) ) {
-			language_attributes();
-		} ?>>
+				<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
 				<head>
 						<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 						<title>Salmon Endpoint</title>
@@ -271,7 +263,7 @@ class Salmon_Plugin {
 				<body>
 				<h1>Salmon Endpoint</h1>
 
-				<p><?php echo $text ?></p>
+				<p><?php echo $text; ?></p>
 				</body>
 				</html>
 		<?php

@@ -33,8 +33,10 @@ class Magic_Sig {
 		);
 
 		$key = openssl_pkey_new( $config );
+
 		$priv_key = null;
-		openssl_pkey_export($key, $priv_key);
+
+		openssl_pkey_export( $key, $priv_key );
 
 		// private key
 		update_user_meta( $user_id, 'magic_sig_private_key', $priv_key );
@@ -55,6 +57,7 @@ class Magic_Sig {
 	 */
 	public static function get_magic_public_key( $user_id, $force = false ) {
 		$key = self::get_public_key( $user_id, $force );
+
 		$magic_public_key = self::to_string( $key );
 
 		if ( false === $magic_public_key ) {
@@ -73,6 +76,7 @@ class Magic_Sig {
 	 */
 	public static function to_string( $key ) {
 		$key = openssl_pkey_get_public( $key );
+
 		$details = openssl_pkey_get_details( $key );
 
 		if ( ! $key || ! $details ) {
@@ -111,11 +115,11 @@ class Magic_Sig {
 		$sig_element  = $env_element->getElementsByTagNameNS( MAGIC_SIG_NS, 'sig' )->item( 0 );
 
 		return array(
-			'data'      => preg_replace( '/\s/', '', $data_element->nodeValue ),
+			'data'      => preg_replace( '/\s/', '', $data_element->nodeValue ), // phpcs:ignore
 			'data_type' => $data_element->getAttribute( 'type' ),
 			'encoding'  => $env_element->getElementsByTagNameNS( MAGIC_SIG_NS, 'encoding' )->item( 0 )->nodeValue,
 			'alg'       => $env_element->getElementsByTagNameNS( MAGIC_SIG_NS, 'alg' )->item( 0 )->nodeValue,
-			'sig'       => preg_replace( '/\s/', '', $sig_element->nodeValue ),
+			'sig'       => preg_replace( '/\s/', '', $sig_element->nodeValue ), // phpcs:ignore
 		);
 	}
 
@@ -124,6 +128,7 @@ class Magic_Sig {
 		$env = Magic_Sig::parse( $xml );
 
 		$text = base64_url_decode( $env['data'] );
+
 		$signer_uri = Magic_Sig::get_author( $text );
 	}
 
@@ -133,16 +138,14 @@ class Magic_Sig {
 			return false;
 		}
 
-		if ( $doc->documentElement->tagName === 'entry' ) {
-			$authors = $doc->documentElement->getElementsByTagName( 'author' );
+		if ( $doc->documentElement->tagName === 'entry' ) { // phpcs:ignore
+			$authors = $doc->documentElement->getElementsByTagName( 'author' ); // phpcs:ignore
 			foreach ( $authors as $author ) {
 				$uris = $author->getElementsByTagName( 'uri' );
 				foreach ( $uris as $uri ) {
-					return $uri->nodeValue;
+					return $uri->nodeValue; // phpcs:ignore
 				}
 			}
 		}
 	}
 }
-
-?>

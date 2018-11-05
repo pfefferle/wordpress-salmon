@@ -4,7 +4,6 @@ class Salmon_Discovery {
 		// Init feeds.
 		add_action( 'atom_head', array( 'Salmon_Discovery', 'print_atom_feed_header' ) );
 		add_action( 'rss2_head', array( 'Salmon_Discovery', 'print_rss_feed_header' ) );
-		//add_action('atom_entry', array('Salmon_Discovery', 'add_salmon_link'));
 
 		// xrd discovery
 		add_action( 'host_meta', array( 'Salmon_Discovery', 'add_host_meta_discovery' ) );
@@ -81,8 +80,8 @@ class Salmon_Discovery {
 	 * adds salmon link to <entry />
 	 */
 	public static function add_salmon_link() {
-		if ( function_exists( "get_webfinger" ) ) {
-			$webfinger = get_webfinger( get_the_author_meta( "ID" ), true );
+		if ( function_exists( 'get_webfinger' ) ) {
+			$webfinger = get_webfinger( get_the_author_meta( 'ID' ), true );
 			printf( '<link rel="salmon" href="%s" />', $webfinger );
 		}
 	}
@@ -96,6 +95,7 @@ class Salmon_Discovery {
 	 */
 	public static function add_user_salmon( $array, $resource, $user ) {
 		$salmon = Salmon_Plugin::generate_api_url( $user );
+
 		$array['links'][] = array(
 			'rel'  => 'salmon',
 			'href' => $salmon,
@@ -127,10 +127,10 @@ class Salmon_Discovery {
 		}
 
 		// add namespace to rss files
-		if ( $type == 'rss' ) {
-			$namespace = "atom:";
+		if ( 'rss' === $type ) {
+			$namespace = 'atom:';
 		} else {
-			$namespace = "";
+			$namespace = '';
 		}
 
 		printf( '<%slink rel="salmon" href="%s"/>', $namespace, esc_url( Salmon_Plugin::generate_api_url( $user ) ) );

@@ -15,6 +15,7 @@ class Salmon_Entry {
 	public $author_uri;
 	public $thr_in_reply_to;
 	public $content;
+	public $summary;
 	public $title;
 	public $updated;
 	public $salmon_signature;
@@ -121,16 +122,30 @@ class Salmon_Entry {
 			}
 		}
 
-		//$entry->webfinger = WebFingerAccount::from_acct_string($entry->author_uri);
+		if ( ! $entry->updated ) {
+			$entry->updated = 'now';
+		}
+
 		return $entry;
 	}
 
 	/**
 	 * Determines whether this Salmon_Entry's signature is valid.
+	 *
 	 * @return boolean True if the signature can be validated, False otherwise.
 	 */
 	public function validate() {
 		return false;
+	}
+
+	/**
+	 * Returns the comment content, and falls back to summary or title if the
+	 * content is empty.
+	 *
+	 * @return string The comment content
+	 */
+	public function get_comment_content() {
+
 	}
 
 	/**
@@ -158,23 +173,9 @@ class Salmon_Entry {
 			'comment_author_url' => $this->author_uri,
 			'comment_content'    => $this->content,
 			'comment_date_gmt'   => date( 'Y-m-d H:i:s', $time ),
-			'comment_date'       => get_date_from_gmt( date( 'Y-m-d H:i:s', $time ) )
-			//'comment_type' => 'salmon'
+			'comment_date'       => get_date_from_gmt( date( 'Y-m-d H:i:s', $time ) ),
+			'comment_type'       => 'salmon'
 		);
-
-		// Pulls user data
-		// TODO(kurrik): This probably needs to be refactored out to SalmonPress.php
-		/*if ($this->webfinger !== false) {
-		  $email = $this->webfinger->get_email();
-		  $uid = email_exists($email);
-		  if ($uid !== false) {
-			$user_data = get_userdata($uid);
-			$commentdata['comment_author'] = $user_data->display_name;
-			$commentdata['comment_author_url'] = $user_data->user_url;
-			$commentdata['comment_author_email'] = $email;
-			$commentdata['user_id'] = $uid;
-		  }
-		}*/
 
 		return $commentdata;
 	}
