@@ -1,17 +1,17 @@
-# Copyright (C) 2018 Matthias Pfefferle
+# Copyright (C) 2019 Matthias Pfefferle
 # This file is distributed under the MIT.
 msgid ""
 msgstr ""
-"Project-Id-Version: Salmon 0.9.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/salmon\n"
-"POT-Creation-Date: 2018-11-05 20:40:34+00:00\n"
+"Project-Id-Version: Salmon 0.9.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress-salmon\n"
+"POT-Creation-Date: 2019-07-08 13:37:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n1.0.1\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #. Plugin Name of the plugin/theme
 msgid "Salmon"

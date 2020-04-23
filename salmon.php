@@ -3,7 +3,7 @@
  * Plugin Name: Salmon
  * Plugin URI: https://github.com/pfefferle/wordpress-salmon
  * Description: Salmon plugin for WordPress.
- * Version: 0.9.1
+ * Version: 0.9.2
  * Author: Matthias Pfefferle
  * Author URI: https://notiz.blog/
  * License: MIT
@@ -106,6 +106,8 @@ class Salmon_Plugin {
 		if ( ! $avatars ) {
 			return $args;
 		}
+
+		$size = $args['size'];
 
 		if ( array_key_exists( $size, $avatars ) ) {
 			$args['url'] = $avatars[ $size ];
