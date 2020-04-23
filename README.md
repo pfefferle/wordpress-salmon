@@ -3,7 +3,7 @@
 **Donate link:** https://notiz.blog/donate/  
 **Tags:** diso, OStatus, Mastodon, Diaspora, federated, StatusNET, Gnu.Social, Salmon, Comments  
 **Requires at least:** 3.0  
-**Tested up to:** 5.2.2  
+**Tested up to:** 5.4  
 **Stable tag:** 0.9.2  
 **License:** MIT  
 **License URI:** http://opensource.org/licenses/MIT  
@@ -32,6 +32,10 @@ and I recommend to use it in combination with OStatus: <https://wordpress.org/pl
 ## Changelog ##
 
 Project and support maintained on github at [pfefferle/wordpress-salmon](https://github.com/pfefferle/wordpress-salmon).
+
+### 0.9.2 ###
+
+* fix php warning
 
 ### 0.9.1 ###
 
